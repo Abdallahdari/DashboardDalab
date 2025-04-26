@@ -8,7 +8,7 @@ export default async function page() {
   const session = await auth();
   const name = session?.user?.email;
   const uniqueCategories = [
-    ...new Set(Allblogs?.map((blog: any) => blog.Category).filter(Boolean)),
+    ...new Set(Allblogs?.map((blog) => blog.Category).filter(Boolean)),
   ];
   console.log(uniqueCategories);
   console.log(name);
