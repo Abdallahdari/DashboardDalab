@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -31,7 +30,7 @@ import {
 import { DeleteProduct } from "@/app/_lib/action";
 // Mock data for products
 
-export default function ProductsPage({ products }: any) {
+export default function ProductsPage({ products }) {
   //   const [products, setProducts] = useState(initialProducts);
 
   const DeleteProducts = async (id) => {

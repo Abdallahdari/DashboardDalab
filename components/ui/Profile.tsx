@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Mail, User, Briefcase } from "lucide-react";
+import { Mail, Briefcase } from "lucide-react";
 
 export default function ProfilePage({ session }) {
   // Mock user data

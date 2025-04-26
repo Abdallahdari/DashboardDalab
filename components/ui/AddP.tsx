@@ -3,7 +3,6 @@
 import type React from "react";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -77,8 +76,7 @@ const availableSizes = [
 ];
 
 export default function AddProductPage() {
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting] = useState(false);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [ratingValue, setRatingValue] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -109,36 +107,6 @@ export default function AddProductPage() {
   }, [ratingValue, form]);
 
   // Handle form submission
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      // Validate form data
-      const values = await form.trigger();
-      if (!values) {
-        setIsSubmitting(false);
-        return;
-      }
-
-      const formData = new FormData(e.currentTarget);
-
-      // Add sizes and rating to form data
-      selectedSizes.forEach((size) => {
-        formData.append("sizes", size);
-      });
-      formData.set("rating", ratingValue.toString());
-
-      // Submit the form using the CreateProduct action
-      await CreateProduct(formData);
-
-      router.push("/dashboard/products");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   // Handle star rating click
   const handleRatingClick = (selectedRating: number) => {
@@ -161,10 +129,6 @@ export default function AddProductPage() {
   };
 
   // Calculate price based on old price and discount
-  const calculatePrice = (oldPrice: number, discount: number) => {
-    if (!oldPrice || discount <= 0) return oldPrice;
-    return +(oldPrice * (1 - discount / 100)).toFixed(2);
-  };
 
   // Calculate discount based on price and old price
   const calculateDiscount = (price: number, oldPrice: number) => {

@@ -18,7 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Edit, MoreHorizontal, PlusCircle, Trash2 } from "lucide-react";
+import { MoreHorizontal, PlusCircle, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -70,7 +70,7 @@ const initialBlogs = [
   },
 ];
 
-export default function BlogsPage({ blog }: any) {
+export default function BlogsPage({ blog }) {
   const [blogs, setBlogs] = useState(initialBlogs);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [blogToDelete, setBlogToDelete] = useState<string | null>(null);

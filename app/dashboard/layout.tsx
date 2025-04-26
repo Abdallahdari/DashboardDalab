@@ -8,7 +8,7 @@ export default function layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="grid  divide-y-gray-300 md:grid-cols-[20rem_1fr] gap-4 h-screen items-start gap-4">
+    <div className="grid  divide-y-gray-300 md:grid-cols-[20rem_1fr]  h-screen items-start gap-4">
       <Sidebar />
       <main className="max-w-[1100px] ">
         <SidePar />

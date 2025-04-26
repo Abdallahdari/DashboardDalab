@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, User, Settings, LogOut, Sun, Moon } from "lucide-react";
+import { Menu, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import {
@@ -25,9 +25,6 @@ const Logout = async () => {
 };
 
 export function Navbar({ toggleSidebar, session }: NavbarProps) {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -62,11 +59,11 @@ export function Navbar({ toggleSidebar, session }: NavbarProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-56 bg-white shadow-md"
+            className="border bg-white border-amber-50 shadow-md z-50 "
             align="end"
             forceMount
           >
-            <DropdownMenuLabel className="font-normal">
+            <DropdownMenuLabel className="font-normal z-50">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">
                   {session?.user.email.split("@")[0]}

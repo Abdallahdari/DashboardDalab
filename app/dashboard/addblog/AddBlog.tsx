@@ -1,18 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import {
   Form,
   FormControl,
@@ -54,8 +47,8 @@ const formSchema = z.object({
   authorAvatar: z.string().optional(),
 });
 
-export default function AddBlogPage({ uniqueCategories, session }: any) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export default function AddBlogPage({ session }) {
+  const [isSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
@@ -9,11 +8,9 @@ import {
   Package,
   X,
   PlusCircle,
-  Grid,
-  Database,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "next-themes";
+
 import { cn } from "@/lib/utils";
 
 interface SidebarProps {
@@ -23,12 +20,6 @@ interface SidebarProps {
 
 export function Sidebar({}: SidebarProps) {
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const navItems = [
     {
