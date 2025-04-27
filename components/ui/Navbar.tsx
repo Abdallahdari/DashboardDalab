@@ -15,11 +15,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Signout } from "@/app/_lib/action";
 
+interface NavbarProps {
+  toggleSidebar: () => void;
+}
 const Logout = async () => {
   await Signout();
 };
 
-export function Navbar({ toggleSidebar, session }) {
+export function Navbar({ toggleSidebar, session }: NavbarProps) {
   return (
     <header className="flex items-center justify-between py-4 border-b border-gray-200 my-4">
       <h1 className="text-3xl font-bold">Dalab AdminPanel</h1>
