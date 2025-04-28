@@ -6,9 +6,5 @@ import { auth } from "@/app/_lib/auth";
 export default async function page() {
   const session = await auth();
 
-  return (
-    <div>
-      <AddBlogPage session={session} />
-    </div>
-  );
+  return <div>{session && <AddBlogPage session={session} />}</div>;
 }

@@ -82,7 +82,7 @@ export function Navbar({ toggleSidebar, session }: NavbarProps) {
                   {session?.user?.email ? session.user.email.split("@")[0] : ""}
                 </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  {session?.user.email ? session.user.email : ""}
+                  {session?.user?.email ? session.user.email : ""}
                 </p>
               </div>
             </DropdownMenuLabel>

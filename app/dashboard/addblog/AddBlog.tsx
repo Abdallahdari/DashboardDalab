@@ -54,7 +54,16 @@ export interface SessionUser {
   };
 }
 interface SessionProbs {
-  session: SessionUser;
+  session:
+    | SessionUser
+    | {
+        user?: {
+          name?: string | null;
+          email?: string | null;
+          image?: string | null;
+        };
+      }
+    | null;
 }
 export default function AddBlogPage({ session }: SessionProbs) {
   const [isSubmitting] = useState(false);
@@ -164,7 +173,9 @@ export default function AddBlogPage({ session }: SessionProbs) {
                         <Input
                           className="cursor-not-allowed"
                           placeholder={
-                            session?.user.email?.split("@")[0] || "Author"
+                            session?.user?.email
+                              ? session.user.email.split("@")[0]
+                              : ""
                           }
                           {...field}
                         />
