@@ -1,6 +1,6 @@
-import { Sidebar } from "@/components/ui/sidebar";
 import React from "react";
 import SidePar from "../_componets/SidePar";
+import { Sidebar } from "@/components/ui/sidebar";
 
 export default function layout({
   children,

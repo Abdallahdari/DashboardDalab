@@ -2,11 +2,10 @@
 
 import type React from "react";
 
-import { useEffect, useState } from "react";
+import { CreateProduct } from "@/app/_lib/action";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -16,13 +15,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft, Minus, Plus, Save, Star } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { ArrowLeft, Save, Star, Plus, Minus } from "lucide-react";
-import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
-import { CreateProduct } from "@/app/_lib/action";
 const formSchema = z.object({
   name: z.string().min(3, {
     message: "Product name must be at least 3 characters.",

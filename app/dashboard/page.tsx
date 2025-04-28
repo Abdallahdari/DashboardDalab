@@ -1,3 +1,4 @@
+import { AllProduct, GetallUsers, GetBlogs } from "@/app/_lib/data";
 import {
   Card,
   CardContent,
@@ -6,9 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FileText, Package, TrendingUp } from "lucide-react";
-import { GetallUsers } from "@/app/_lib/data";
-import { GetBlogs } from "@/app/_lib/data";
-import { AllProduct } from "@/app/_lib/data";
 
 import { formatDistanceToNow } from "date-fns";
 

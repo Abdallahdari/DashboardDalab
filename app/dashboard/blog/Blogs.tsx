@@ -1,24 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
+import { DeleteBlogs } from "@/app/_lib/action";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, PlusCircle, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -27,9 +11,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { MoreHorizontal, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { DeleteBlogs } from "@/app/_lib/action";
-import { toast, ToastContainer } from "react-toastify";
+import Link from "next/link";
+import { useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 // Mock data for blogs
 const initialBlogs = [

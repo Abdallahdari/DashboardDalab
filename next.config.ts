@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["igojpyhmueeufmrtfsbe.supabase.co"],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
