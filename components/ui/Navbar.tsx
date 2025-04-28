@@ -17,15 +17,23 @@ import { Signout } from "@/app/_lib/action";
 // types/SessionUser.ts
 export interface SessionUser {
   user: {
-    name?: string | null;
-    email?: string | null;
-    image?: string | null;
+    name?: string;
+    email?: string;
+    image?: string;
   };
 }
-
 interface NavbarProps {
-  toggleSidebar?: () => void; // optional now
-  session: SessionUser | null;
+  toggleSidebar?: () => void;
+  session:
+    | SessionUser
+    | {
+        user?: {
+          name?: string | null;
+          email?: string | null;
+          image?: string | null;
+        };
+      }
+    | null;
 }
 const Logout = async () => {
   await Signout();
