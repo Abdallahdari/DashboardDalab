@@ -16,7 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Signout } from "@/app/_lib/action";
 interface SessionUser {
   user: {
-    name?: string | null;
+    name?: string;
     email: string;
   };
 }
