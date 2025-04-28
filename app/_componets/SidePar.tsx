@@ -5,9 +5,5 @@ import { Navbar } from "@/components/ui/Navbar";
 export default async function SidePar() {
   const session = await auth();
   console.log(session);
-  return (
-    <div>
-      <Navbar session={session} />
-    </div>
-  );
+  return <div>{session && <Navbar session={session} />}</div>;
 }

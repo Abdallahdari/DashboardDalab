@@ -14,16 +14,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Signout } from "@/app/_lib/action";
-interface SessionUser {
+// types/SessionUser.ts
+export interface SessionUser {
   user: {
-    name?: string;
-    email: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
   };
 }
 
 interface NavbarProps {
   toggleSidebar?: () => void; // optional now
-  session: SessionUser;
+  session: SessionUser | null;
 }
 const Logout = async () => {
   await Signout();
@@ -54,7 +56,9 @@ export function Navbar({ toggleSidebar, session }: NavbarProps) {
                   alt="User"
                 />
                 <AvatarFallback>
-                  {session?.user.name?.charAt(0).toUpperCase()}
+                  {session?.user?.name
+                    ? session.user.name.charAt(0).toUpperCase()
+                    : ""}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -67,10 +71,10 @@ export function Navbar({ toggleSidebar, session }: NavbarProps) {
             <DropdownMenuLabel className="font-normal z-50">
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">
-                  {session?.user.email.split("@")[0]}
+                  {session?.user?.email ? session.user.email.split("@")[0] : ""}
                 </p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  {session?.user.email}
+                  {session?.user.email ? session.user.email : ""}
                 </p>
               </div>
             </DropdownMenuLabel>
