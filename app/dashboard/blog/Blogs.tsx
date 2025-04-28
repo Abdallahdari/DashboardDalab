@@ -69,8 +69,22 @@ const initialBlogs = [
     date: "2023-06-05",
   },
 ];
+interface Blogs {
+  id: string;
+  title: string;
+  topic: string;
+  image: string;
+  category: string;
+  status: string;
+  aouther: string;
+  Date: string;
+  Smlldescription: string;
+}
+interface BLogProbs {
+  blog: Blogs[];
+}
 
-export default function BlogsPage({ blog }) {
+export default function BlogsPage({ blog }: BLogProbs) {
   const [blogs, setBlogs] = useState(initialBlogs);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [blogToDelete, setBlogToDelete] = useState<string | null>(null);
@@ -82,7 +96,7 @@ export default function BlogsPage({ blog }) {
       setBlogToDelete(null);
     }
   };
-  const DeleteBlog = async (id) => {
+  const DeleteBlog = async (id: string) => {
     await DeleteBlogs(id);
     toast.success("Deleted Successfully", {
       duration: 1000,

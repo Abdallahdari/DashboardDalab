@@ -6,9 +6,5 @@ export default async function Page() {
   const products = await AllProduct();
   console.log(products);
 
-  return (
-    <div>
-      <Product products={products} />
-    </div>
-  );
+  return <div>{products && <Product products={products} />}</div>;
 }

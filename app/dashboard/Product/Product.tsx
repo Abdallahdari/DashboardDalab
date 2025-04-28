@@ -29,11 +29,22 @@ import {
 } from "@/components/ui/dialog";
 import { DeleteProduct } from "@/app/_lib/action";
 // Mock data for products
-
-export default function ProductsPage({ products }) {
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  size: string;
+  stock: number;
+  image: string;
+  Quantity: number;
+}
+interface ProductsPageProps {
+  products: Product[];
+}
+export default function ProductsPage({ products }: ProductsPageProps) {
   //   const [products, setProducts] = useState(initialProducts);
 
-  const DeleteProducts = async (id) => {
+  const DeleteProducts = async (id: string) => {
     await DeleteProduct(id);
     window.location.reload();
   };

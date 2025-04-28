@@ -46,8 +46,17 @@ const formSchema = z.object({
   smallDesr: z.string().optional(),
   authorAvatar: z.string().optional(),
 });
-
-export default function AddBlogPage({ session }) {
+export interface SessionUser {
+  user: {
+    name?: string;
+    email?: string;
+    image?: string;
+  };
+}
+interface SessionProbs {
+  session: SessionUser;
+}
+export default function AddBlogPage({ session }: SessionProbs) {
   const [isSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
