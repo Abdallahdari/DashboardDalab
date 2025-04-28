@@ -14,9 +14,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Signout } from "@/app/_lib/action";
+interface SessionUser {
+  user: {
+    name?: string | null;
+    email: string;
+  };
+}
+
 interface NavbarProps {
   toggleSidebar?: () => void; // optional now
-  session: any;
+  session: SessionUser;
 }
 const Logout = async () => {
   await Signout();
