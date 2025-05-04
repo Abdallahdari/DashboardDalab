@@ -48,12 +48,8 @@ export default function ProductsPage({ products }: ProductsPageProps) {
 
   const DeleteProducts = async (id: string) => {
     await DeleteProduct(id);
-    toast.success("Delted the Product", {
-      duration: 5,
-      onClose: () => {
-        window.location.reload();
-      },
-    });
+    toast.success("Delted the Product");
+    window.location.reload();
   };
   return (
     <div className="space-y-6">
