@@ -102,7 +102,6 @@ export async function Createblog(formData) {
   if (error) {
     console.error("Error deleting:", error.message);
   } else {
-    revalidatePath;
     console.log("Created sucessfully");
   }
   return data;

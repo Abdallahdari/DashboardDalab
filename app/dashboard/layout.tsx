@@ -1,7 +1,6 @@
 import React from "react";
 import SidePar from "../_componets/SidePar";
 import { Sidebar } from "@/components/ui/sidebar";
-import { ToastContainer } from "react-toastify";
 
 export default function layout({
   children,
