@@ -1,6 +1,7 @@
 import React from "react";
 import SidePar from "../_componets/SidePar";
 import { Sidebar } from "@/components/ui/sidebar";
+import { ToastContainer } from "react-toastify";
 
 export default function layout({
   children,
@@ -10,6 +11,7 @@ export default function layout({
   return (
     <div className="grid  divide-y-gray-300 md:grid-cols-[20rem_1fr]  h-screen items-start gap-4">
       <Sidebar />
+
       <main className="max-w-[1100px] ">
         <SidePar />
         {children}

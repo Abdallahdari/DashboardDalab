@@ -29,7 +29,7 @@ import { MoreHorizontal, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 // Mock data for blogs
 const initialBlogs = [
@@ -98,7 +98,7 @@ export default function BlogsPage({ blog }: BLogProbs) {
   };
   const DeleteBlog = async (id: string) => {
     await DeleteBlogs(id);
-
+    toast.success("deleted sucessfully");
     window.location.reload();
   };
 

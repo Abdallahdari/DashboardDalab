@@ -22,7 +22,10 @@ import { ArrowLeft, Minus, Plus, Save, Star } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
   name: z.string().min(3, {
     message: "Product name must be at least 3 characters.",
@@ -78,7 +81,6 @@ const availableSizes = [
 export default function AddProductPage() {
   const [isSubmitting] = useState(false);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  const [ratingValue, setRatingValue] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -101,19 +103,6 @@ export default function AddProductPage() {
     form.setValue("sizes", selectedSizes);
   }, [selectedSizes, form]);
 
-  // Update form when ratingValue changes
-  useEffect(() => {
-    form.setValue("rating", ratingValue);
-  }, [ratingValue, form]);
-
-  // Handle form submission
-
-  // Handle star rating click
-  const handleRatingClick = (selectedRating: number) => {
-    setRatingValue(selectedRating);
-  };
-
-  // Handle size checkbox change
   const handleSizeChange = (sizeId: string, checked: boolean) => {
     if (checked) {
       setSelectedSizes((prev) => [...prev, sizeId]);
@@ -186,9 +175,23 @@ export default function AddProductPage() {
 
     setIsUpdating(false);
   };
+  const router = useRouter();
+  const Handlesubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData(e.target);
+      await CreateProduct(formData);
+      toast.success("Product created Successfully");
+      router.push("/dashboard/Product");
+    } catch (error) {
+      toast.error("Error creating blog");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="space-y-6">
+      <ToastContainer />
       <div className="flex items-center gap-4">
         <Link href="/dashboard/products">
           <Button variant="outline" size="icon">
@@ -204,7 +207,7 @@ export default function AddProductPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form action={CreateProduct} className="space-y-6">
+            <form onSubmit={Handlesubmit} className="space-y-6">
               <FormField
                 control={form.control}
                 name="name"
@@ -350,29 +353,6 @@ export default function AddProductPage() {
               </div>
 
               {/* Rating Field - Now using a hidden input to ensure the value is submitted */}
-              <div className="space-y-2">
-                <FormLabel>Product Rating</FormLabel>
-                <input type="hidden" name="rating" value={ratingValue} />
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      className={`h-6 w-6 cursor-pointer ${
-                        star <= ratingValue
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-gray-300"
-                      }`}
-                      onClick={() => handleRatingClick(star)}
-                    />
-                  ))}
-                  <span className="ml-2 text-sm text-muted-foreground">
-                    {ratingValue > 0 ? `${ratingValue} out of 5` : "No rating"}
-                  </span>
-                </div>
-                <FormDescription>
-                  Click on the stars to set a rating
-                </FormDescription>
-              </div>
 
               {/* Sizes Field - Now using hidden inputs to ensure values are submitted */}
               <div className="space-y-2">

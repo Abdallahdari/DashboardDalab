@@ -27,6 +27,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ToastContainer, toast } from "react-toastify";
+
 import { DeleteProduct } from "@/app/_lib/action";
 // Mock data for products
 interface Product {
@@ -46,10 +48,16 @@ export default function ProductsPage({ products }: ProductsPageProps) {
 
   const DeleteProducts = async (id: string) => {
     await DeleteProduct(id);
-    window.location.reload();
+    toast.success("Delted the Product", {
+      duration: 5,
+      onClose: () => {
+        window.location.reload();
+      },
+    });
   };
   return (
     <div className="space-y-6">
+      <ToastContainer />
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-xl font-semibold">Manage Products</h1>
         <Link href="/dashboard/Productadd">

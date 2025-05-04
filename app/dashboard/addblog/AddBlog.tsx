@@ -21,6 +21,8 @@ import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   title: z.string().min(5, {
@@ -67,7 +69,7 @@ interface SessionProbs {
 }
 export default function AddBlogPage({ session }: SessionProbs) {
   const [isSubmitting] = useState(false);
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -82,9 +84,24 @@ export default function AddBlogPage({ session }: SessionProbs) {
       authorAvatar: "",
     },
   });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData(e.target);
+      await Createblog(formData);
+
+      toast.success("Blog Created Successfully");
+      router.push("/dashboard/blog");
+    } catch (error) {
+      toast.error("Error creating blog");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="space-y-6">
+      <ToastContainer />
       <div className="flex items-center gap-4">
         <Link href="/dashboard/blog">
           <Button variant="outline" size="icon">
@@ -100,7 +117,7 @@ export default function AddBlogPage({ session }: SessionProbs) {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form action={Createblog} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <FormField
                 control={form.control}
                 name="title"
