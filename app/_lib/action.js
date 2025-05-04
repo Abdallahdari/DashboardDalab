@@ -1,7 +1,6 @@
 "use server";
 import { supabase } from "@/app/_lib/supabase";
 import { auth, signIn, signOut } from "./auth";
-import { revalidatePath } from "next/cache";
 export async function Signin(formData) {
   await signIn("credentials", formData);
 }
