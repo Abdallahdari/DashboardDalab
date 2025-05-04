@@ -181,8 +181,13 @@ export default function AddProductPage() {
     try {
       const formData = new FormData(e.target);
       await CreateProduct(formData);
-      toast.success("Product created Successfully");
-      router.push("/dashboard/Product");
+      toast.success("Product has been created sucessfully", {
+        duration: 2000, // Auto-close after 2 seconds
+        onClose: () => {
+          // Navigate to the dashboard/blog page when the toast closes
+          router.push("/dashboard/Product");
+        },
+      });
     } catch (error) {
       toast.error("Error creating blog");
       console.error(error);

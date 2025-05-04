@@ -98,8 +98,12 @@ export default function BlogsPage({ blog }: BLogProbs) {
   };
   const DeleteBlog = async (id: string) => {
     await DeleteBlogs(id);
-    toast.success("deleted sucessfully");
-    window.location.reload();
+    toast.success("deleted sucessfully", {
+      duration: 2000,
+      onClose: () => {
+        window.location.reload();
+      },
+    });
   };
 
   return (

@@ -90,9 +90,13 @@ export default function AddBlogPage({ session }: SessionProbs) {
     try {
       const formData = new FormData(e.target);
       await Createblog(formData);
-
-      toast.success("Blog Created Successfully");
-      router.push("/dashboard/blog");
+      toast.success("Blog has been created sucessfully", {
+        duration: 2000, // Auto-close after 2 seconds
+        onClose: () => {
+          // Navigate to the dashboard/blog page when the toast closes
+          router.push("/dashboard/blog");
+        },
+      });
     } catch (error) {
       toast.error("Error creating blog");
       console.error(error);
