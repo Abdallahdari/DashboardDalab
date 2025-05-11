@@ -35,7 +35,7 @@ interface Product {
   id: string;
   name: string;
   price: number;
-  size: string;
+  sizes: string;
   stock: number;
   image: string;
   Quantity: number;
@@ -113,8 +113,15 @@ export default function ProductsPage({ products }: ProductsPageProps) {
                     <TableCell className="hidden md:table-cell">
                       ${item.price}
                     </TableCell>
-                    <TableCell className="hidden uppercase md:table-cell">
-                      {item.size}
+                    <TableCell className="hidden md:table-cell">
+                      {item.sizes?.map((item) => (
+                        <span
+                          className="mr-2 font-semibold uppercase"
+                          key={item}
+                        >
+                          {item}
+                        </span>
+                      ))}
                     </TableCell>
                     <TableCell className=" md:table-cell flex items-center gap-4 ">
                       <span

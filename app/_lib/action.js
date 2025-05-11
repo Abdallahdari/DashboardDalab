@@ -38,7 +38,7 @@ export async function DeleteProduct(id) {
     console.log("Deleted successfully");
   }
 }
-export async function CreateProduct(formData) {
+export async function CreateProduct(formData, selectedSizes) {
   const name = formData.get("name");
   const imageUrl = formData.get("imageUrl");
   const price = formData.get("price");
@@ -46,10 +46,13 @@ export async function CreateProduct(formData) {
   const discount = formData.get("discount");
   const quantity = formData.get("quantity");
   const rating = formData.get("rating");
-  const sizes = formData.get("sizes");
   const description = formData.get("description");
 
-  console.log(formData);
+  console.log(formData, selectedSizes);
+  if (!selectedSizes) {
+    console.error("no size Slected");
+    return null;
+  }
   const { data, error } = await supabase
     .from("Product")
     .insert([
@@ -61,15 +64,16 @@ export async function CreateProduct(formData) {
         Discount: discount,
         Stars: rating,
         OldPrice: oldPrice,
-        size: sizes,
+        sizes: selectedSizes,
         Quantity: quantity,
       },
     ])
     .select();
+
   if (error) {
-    console.error("Error deleting:", error.message);
+    console.error("Error creating product:", error.message);
   } else {
-    console.log("Created new Product sucessfully");
+    console.log("Created new Product successfully");
   }
   return data;
 }

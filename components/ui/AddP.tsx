@@ -180,20 +180,23 @@ export default function AddProductPage() {
     e.preventDefault();
     try {
       const formData = new FormData(e.target);
-      await CreateProduct(formData);
-      toast.success("Product has been created sucessfully", {
-        duration: 2000, // Auto-close after 2 seconds
+      // Add sizes to FormData
+      selectedSizes.forEach((size) => {
+        formData.append("sizes", size);
+      });
+
+      await CreateProduct(formData, selectedSizes);
+      toast.success("Product has been created successfully", {
+        duration: 2000,
         onClose: () => {
-          // Navigate to the dashboard/blog page when the toast closes
           router.push("/dashboard/Product");
         },
       });
     } catch (error) {
-      toast.error("Error creating blog");
+      toast.error("Error creating product");
       console.error(error);
     }
   };
-
   return (
     <div className="space-y-6">
       <ToastContainer />
