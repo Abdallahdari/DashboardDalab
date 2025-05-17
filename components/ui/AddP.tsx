@@ -28,7 +28,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -37,13 +36,6 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 
 // Example categories - replace with your actual data source
-const initialCategories = [
-  { value: "electronics", label: "Electronics" },
-  { value: "clothing", label: "Clothing" },
-  { value: "books", label: "Books" },
-  { value: "home", label: "Home & Kitchen" },
-  { value: "toys", label: "Toys & Games" },
-];
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -125,13 +117,6 @@ export default function AddProductPage({}) {
       imageUrl: "",
       sizes: [],
       category: "",
-    },
-  });
-
-  const newCategoryForm = useForm<z.infer<typeof newCategorySchema>>({
-    resolver: zodResolver(newCategorySchema),
-    defaultValues: {
-      name: "",
     },
   });
 
