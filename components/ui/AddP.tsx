@@ -18,32 +18,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  ArrowLeft,
-  Check,
-  ChevronsUpDown,
-  Loader2,
-  Minus,
-  Plus,
-  Save,
-} from "lucide-react";
+import { ArrowLeft, Loader2, Minus, Plus, Save } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+
 import {
   Dialog,
   DialogContent,
@@ -52,7 +32,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
 
 import * as z from "zod";
 import { useRouter } from "next/navigation";
@@ -127,14 +106,11 @@ const availableSizes = [
   { id: "xxl", label: "XXL" },
 ];
 
-export default function AddProductPage({ Catogery }) {
+export default function AddProductPage({}) {
   const [isSubmitting, setisSubmiting] = useState(false);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [categories, setCategories] = useState(initialCategories);
-  const [open, setOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [categoryValue, setCategoryValue] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -234,24 +210,6 @@ export default function AddProductPage({ Catogery }) {
 
     setIsUpdating(false);
   };
-
-  function onCreateCategory(values: z.infer<typeof newCategorySchema>) {
-    // Generate value from name (lowercase, replace spaces with hyphens)
-    const generatedValue = values.name.toLowerCase().replace(/\s+/g, "-");
-
-    const newCategory = {
-      value: generatedValue,
-      label: values.name,
-    };
-
-    setCategories([...categories, newCategory]);
-    setCategoryValue(newCategory.value);
-    form.setValue("category", newCategory.value);
-    setDialogOpen(false);
-    newCategoryForm.reset();
-
-    toast.success(`New category "${values.name}" has been created.`);
-  }
 
   const router = useRouter();
   const Handlesubmit = async (e) => {
@@ -559,39 +517,6 @@ export default function AddProductPage({ Catogery }) {
               Add a new category to the system.
             </DialogDescription>
           </DialogHeader>
-          <Form {...newCategoryForm}>
-            <form
-              onSubmit={newCategoryForm.handleSubmit(onCreateCategory)}
-              className="space-y-4"
-            >
-              <FormField
-                control={newCategoryForm.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g. Sports & Outdoors" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Enter the name for your new category.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <DialogFooter>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setDialogOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit">Create Category</Button>
-              </DialogFooter>
-            </form>
-          </Form>
         </DialogContent>
       </Dialog>
     </div>
