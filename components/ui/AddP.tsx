@@ -82,12 +82,6 @@ const formSchema = z.object({
   }),
 });
 
-const newCategorySchema = z.object({
-  name: z.string().min(2, {
-    message: "Category name must be at least 2 characters.",
-  }),
-});
-
 // Available sizes for the product
 const availableSizes = [
   { id: "xs", label: "XS" },
