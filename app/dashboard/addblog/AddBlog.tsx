@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Loader2, Save } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -68,7 +68,7 @@ interface SessionProbs {
     | null;
 }
 export default function AddBlogPage({ session }: SessionProbs) {
-  const [isSubmitting] = useState(false);
+  const [isSubmitting, setisSubmiting] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -86,12 +86,32 @@ export default function AddBlogPage({ session }: SessionProbs) {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setisSubmiting(true);
+    const formValues = form.getValues();
 
+    if (!formValues.title) {
+      toast.error("Title is required");
+      setisSubmiting(false);
+      return;
+    }
+
+    if (!formValues.featuredImage) {
+      toast.error("Featured image is required");
+      setisSubmiting(false);
+      return;
+    }
+
+    if (!formValues.smallDesr) {
+      toast.error("Small description is required");
+      setisSubmiting(false);
+      return;
+    }
     try {
       const formData = new FormData(e.target);
       await Createblog(formData);
       toast.success("Blog has been created sucessfully", {
-        duration: 2000, // Auto-close after 2 seconds
+        autoClose: 2000,
+        // Auto-close after 2 seconds
         onClose: () => {
           // Navigate to the dashboard/blog page when the toast closes
           router.push("/dashboard/blog");
@@ -148,11 +168,7 @@ export default function AddBlogPage({ session }: SessionProbs) {
                     <FormItem>
                       <FormLabel>Small Description</FormLabel>
                       <FormControl>
-                        <Input
-                          required
-                          placeholder="Enter image URL"
-                          {...field}
-                        />
+                        <Input placeholder="Enter image URL" {...field} />
                       </FormControl>
                       <FormDescription>
                         Enter Small Description of the blog you are posting
@@ -171,11 +187,7 @@ export default function AddBlogPage({ session }: SessionProbs) {
                     <FormItem>
                       <FormLabel>Featured Image URL</FormLabel>
                       <FormControl>
-                        <Input
-                          required
-                          placeholder="Enter image URL"
-                          {...field}
-                        />
+                        <Input placeholder="Enter image URL" {...field} />
                       </FormControl>
                       <FormDescription>
                         Enter a URL for the featured image of your blog post
@@ -192,6 +204,7 @@ export default function AddBlogPage({ session }: SessionProbs) {
                       <FormLabel>Author Name</FormLabel>
                       <FormControl>
                         <Input
+                          readOnly
                           className="cursor-not-allowed"
                           placeholder={
                             session?.user?.email
@@ -216,7 +229,6 @@ export default function AddBlogPage({ session }: SessionProbs) {
                       <FormLabel>Author Image</FormLabel>
                       <FormControl>
                         <Input
-                          required
                           placeholder="Enter author image URL"
                           {...field}
                         />
@@ -235,7 +247,7 @@ export default function AddBlogPage({ session }: SessionProbs) {
                     <FormItem>
                       <FormLabel>Publish Date</FormLabel>
                       <FormControl>
-                        <Input required type="date" {...field} />
+                        <Input type="date" {...field} />
                       </FormControl>
                       <FormDescription>
                         When should this blog post be published
@@ -265,16 +277,21 @@ export default function AddBlogPage({ session }: SessionProbs) {
               />
 
               <div className="flex justify-end gap-4">
-                <Link href="/dashboard/blogs">
-                  <Button variant="outline">Cancel</Button>
-                </Link>
-                <Button type="submit" disabled={isSubmitting}>
+                <Link href="/dashboard/blogs"></Link>
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="hover:bg-slate-950 cursor-pointer bg-gray-300 rounded-md hover:text-white"
+                >
                   {isSubmitting ? (
-                    <>Saving...</>
+                    <>
+                      <Loader2 className="animate-spin" />
+                      <>Saving...</>
+                    </>
                   ) : (
                     <>
                       <Save className="mr-2 h-4 w-4" />
-                      Save Blog
+                      Save Product
                     </>
                   )}
                 </Button>

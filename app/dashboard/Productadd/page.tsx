@@ -1,7 +1,7 @@
 import AddProductPage from "@/components/ui/AddP";
 import React from "react";
-
-export default function page() {
+import { AllProduct } from "@/app/_lib/data";
+export default async function page() {
   return (
     <div>
       <AddProductPage />

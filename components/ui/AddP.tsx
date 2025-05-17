@@ -18,14 +18,54 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, Minus, Plus, Save } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  ChevronsUpDown,
+  Loader2,
+  Minus,
+  Plus,
+  Save,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 import * as z from "zod";
 import { useRouter } from "next/navigation";
+
+// Example categories - replace with your actual data source
+const initialCategories = [
+  { value: "electronics", label: "Electronics" },
+  { value: "clothing", label: "Clothing" },
+  { value: "books", label: "Books" },
+  { value: "home", label: "Home & Kitchen" },
+  { value: "toys", label: "Toys & Games" },
+];
+
 const formSchema = z.object({
   name: z.string().min(3, {
     message: "Product name must be at least 3 characters.",
@@ -66,6 +106,15 @@ const formSchema = z.object({
     })
     .optional(),
   sizes: z.array(z.string()).default([]), // Changed from optional to default([])
+  category: z.string().min(1, {
+    message: "Please select or create a category.",
+  }),
+});
+
+const newCategorySchema = z.object({
+  name: z.string().min(2, {
+    message: "Category name must be at least 2 characters.",
+  }),
 });
 
 // Available sizes for the product
@@ -78,10 +127,14 @@ const availableSizes = [
   { id: "xxl", label: "XXL" },
 ];
 
-export default function AddProductPage() {
-  const [isSubmitting] = useState(false);
+export default function AddProductPage({ Catogery }) {
+  const [isSubmitting, setisSubmiting] = useState(false);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [categories, setCategories] = useState(initialCategories);
+  const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [categoryValue, setCategoryValue] = useState("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -95,6 +148,14 @@ export default function AddProductPage() {
       quantity: 1,
       imageUrl: "",
       sizes: [],
+      category: "",
+    },
+  });
+
+  const newCategoryForm = useForm<z.infer<typeof newCategorySchema>>({
+    resolver: zodResolver(newCategorySchema),
+    defaultValues: {
+      name: "",
     },
   });
 
@@ -116,8 +177,6 @@ export default function AddProductPage() {
     if (!price || discount <= 0) return price;
     return +(price / (1 - discount / 100)).toFixed(2);
   };
-
-  // Calculate price based on old price and discount
 
   // Calculate discount based on price and old price
   const calculateDiscount = (price: number, oldPrice: number) => {
@@ -175,9 +234,56 @@ export default function AddProductPage() {
 
     setIsUpdating(false);
   };
+
+  function onCreateCategory(values: z.infer<typeof newCategorySchema>) {
+    // Generate value from name (lowercase, replace spaces with hyphens)
+    const generatedValue = values.name.toLowerCase().replace(/\s+/g, "-");
+
+    const newCategory = {
+      value: generatedValue,
+      label: values.name,
+    };
+
+    setCategories([...categories, newCategory]);
+    setCategoryValue(newCategory.value);
+    form.setValue("category", newCategory.value);
+    setDialogOpen(false);
+    newCategoryForm.reset();
+
+    toast.success(`New category "${values.name}" has been created.`);
+  }
+
   const router = useRouter();
   const Handlesubmit = async (e) => {
     e.preventDefault();
+    setisSubmiting(true);
+    const formValues = form.getValues();
+    if (!formValues.name) {
+      toast.error("Product name is required");
+      setisSubmiting(false);
+      return;
+    }
+
+    if (!formValues.imageUrl) {
+      toast.error("Image url is required");
+      setisSubmiting(false);
+      return;
+    }
+    if (!formValues.price) {
+      toast.error("Price is required");
+      setisSubmiting(false);
+      return;
+    }
+    if (!formValues.sizes) {
+      toast.error("size is required");
+      setisSubmiting(false);
+      return;
+    }
+    if (!formValues.description) {
+      toast.error("description is required");
+      setisSubmiting(false);
+      return;
+    }
     try {
       const formData = new FormData(e.target);
       // Add sizes to FormData
@@ -187,7 +293,7 @@ export default function AddProductPage() {
 
       await CreateProduct(formData, selectedSizes);
       toast.success("Product has been created successfully", {
-        duration: 2000,
+        autoClose: 2000,
         onClose: () => {
           router.push("/dashboard/Product");
         },
@@ -197,6 +303,7 @@ export default function AddProductPage() {
       console.error(error);
     }
   };
+
   return (
     <div className="space-y-6">
       <ToastContainer />
@@ -229,26 +336,28 @@ export default function AddProductPage() {
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="imageUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Product Image URL</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="https://example.com/image.jpg"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Enter a URL for the product image
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+                {" "}
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Product Image URL</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://example.com/image.jpg"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Enter a URL for the product image
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <FormField
@@ -417,14 +526,17 @@ export default function AddProductPage() {
               />
 
               <div className="flex justify-end gap-4">
-                <Link href="/dashboard/products">
-                  <Button type="button" variant="outline">
-                    Cancel
-                  </Button>
-                </Link>
-                <Button type="submit" disabled={isSubmitting}>
+                <Link href="/dashboard/products"></Link>
+                <Button
+                  className="hover:bg-slate-950 cursor-pointer bg-gray-300 rounded-md hover:text-white"
+                  type="submit"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? (
-                    <>Saving...</>
+                    <>
+                      <Loader2 className="animate-spin" />
+                      <>Saving...</>
+                    </>
                   ) : (
                     <>
                       <Save className="mr-2 h-4 w-4" />
@@ -437,6 +549,51 @@ export default function AddProductPage() {
           </Form>
         </CardContent>
       </Card>
+
+      {/* Create Category Dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-white z-50">
+          <DialogHeader>
+            <DialogTitle>Create New Category</DialogTitle>
+            <DialogDescription>
+              Add a new category to the system.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...newCategoryForm}>
+            <form
+              onSubmit={newCategoryForm.handleSubmit(onCreateCategory)}
+              className="space-y-4"
+            >
+              <FormField
+                control={newCategoryForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g. Sports & Outdoors" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Enter the name for your new category.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit">Create Category</Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
