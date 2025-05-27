@@ -45,7 +45,6 @@ export async function CreateProduct(formData, selectedSizes) {
   const oldPrice = formData.get("oldPrice");
   const discount = formData.get("discount");
   const quantity = formData.get("quantity");
-  const rating = formData.get("rating");
   const description = formData.get("description");
 
   console.log(formData, selectedSizes);
@@ -62,7 +61,6 @@ export async function CreateProduct(formData, selectedSizes) {
         description: description,
         price: price,
         Discount: discount,
-        Stars: rating,
         OldPrice: oldPrice,
         sizes: selectedSizes,
         Quantity: quantity,
