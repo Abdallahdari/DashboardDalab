@@ -23,3 +23,35 @@ export async function AllProduct() {
   console.log(data);
   return data;
 }
+
+export async function getUserOrders() {
+  try {
+    const { data, error } = await supabase.from("Orders-Main").select(`
+  id,
+  UserId,
+  User:UserId (
+    id,
+    email,
+    name
+  ),
+  OrderItems (
+    id,
+    quatitiy,
+    ProductID,
+    Product:ProductID (
+      id,
+      name,
+      price,
+      image
+    )
+  )
+`);
+
+    if (error) throw error;
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    throw new Error("Failed to fetch orders: " + error.message);
+  }
+}

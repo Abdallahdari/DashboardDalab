@@ -49,6 +49,11 @@ export function Sidebar({}: SidebarProps) {
       href: "/dashboard/addblog",
       icon: PlusCircle,
     },
+    {
+      title: "Oders",
+      href: "/dashboard/orders",
+      icon: PlusCircle,
+    },
   ];
 
   return (

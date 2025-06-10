@@ -27,6 +27,9 @@ export default function LoginPage() {
           <CardTitle className="text-2xl font-bold text-center">
             Login
           </CardTitle>
+          <CardTitle className="text-xl font-semibold text-gray-400 text-center">
+            Welcome back to Dalab addmin Page
+          </CardTitle>
           <CardDescription className="text-center">
             Enter your email and password to login to your account
           </CardDescription>

@@ -1,4 +1,9 @@
-import { AllProduct, GetallUsers, GetBlogs } from "@/app/_lib/data";
+import {
+  AllProduct,
+  GetallUsers,
+  GetBlogs,
+  getUserOrders,
+} from "@/app/_lib/data";
 import {
   Card,
   CardContent,
@@ -14,6 +19,16 @@ export default async function DashboardPage() {
   const Blogs = await GetBlogs();
   const Products = await AllProduct();
   const Users = await GetallUsers();
+  const orders = await getUserOrders();
+  const totalSales = orders.reduce((acc, order) => {
+    const orderTotal = order.OrderItems.reduce((sum, item) => {
+      return sum + (item.Product?.price || 0) * (item.quatitiy || 0);
+    }, 0);
+    return acc + orderTotal;
+  }, 0);
+
+  console.log("Total Sales: $", totalSales.toFixed(2));
+
   console.log(Users, Products);
   return (
     <div className="space-y-6 ">
@@ -94,7 +109,7 @@ export default async function DashboardPage() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$12,234</div>
+            <div className="text-2xl font-bold">${totalSales}</div>
             <p className="text-xs text-muted-foreground">+8% from last month</p>
           </CardContent>
         </Card>
